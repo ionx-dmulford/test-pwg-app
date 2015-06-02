@@ -1,0 +1,5 @@
+﻿CREATE TABLE [dbo].[AnalyticsConfig]
+(
+	[GatewayGuid] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY, 
+    [TeamViewerID] NVARCHAR(100) NOT NULL
+)

@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="4ebfe065-df4b-4b37-9a91-b6327cf1736a" ChangeDateTime="05/15/2015 14:50:29">
+    <Property Name="ElementName" Value="[dbo].[AnalyticsConfig].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[AnalyticsConfig]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="GatewayGuid" />
+  </Operation>
+</Operations>

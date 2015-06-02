@@ -1,0 +1,376 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="GatewayAnalyticsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Disk">
+          <Key>
+            <PropertyRef Name="DiskID" />
+          </Key>
+          <Property Name="DiskID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GatewayGuid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Label" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="TotalSpace" Type="bigint" Nullable="false" />
+          <Property Name="UsedSpace" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Gateway">
+          <Key>
+            <PropertyRef Name="GatewayGuid" />
+          </Key>
+          <Property Name="GatewayGuid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="TeamViewerID" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="MachineName" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="LastReportDate" Type="datetime" Nullable="false" />
+          <Property Name="RunningSince" Type="datetime" />
+          <Property Name="OperatingSystem" Type="nvarchar" MaxLength="500" />
+          <Property Name="CpuInfo" Type="nvarchar" MaxLength="500" />
+          <Property Name="MemorySize" Type="bigint" />
+          <Property Name="Latitude" Type="float" />
+          <Property Name="Longitude" Type="float" />
+          <Property Name="LocationDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="LatestEvent">
+          <Key>
+            <PropertyRef Name="EventID" />
+          </Key>
+          <Property Name="EventID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GatewayGuid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EventDateUtc" Type="datetime" Nullable="false" />
+          <Property Name="AssetName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="EventName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="EventInfo" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PerformanceMetric">
+          <Key>
+            <PropertyRef Name="GatewayGuid" />
+          </Key>
+          <Property Name="GatewayGuid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="TotalEventsProcessed" Type="int" />
+          <Property Name="EventsProcessedPerSec" Type="int" />
+          <Property Name="CurrentSignalQuality" Type="int" />
+          <Property Name="AverageSignalQuality" Type="int" />
+          <Property Name="Reliability" Type="int" />
+          <Property Name="Stability" Type="int" />
+          <Property Name="Latency" Type="int" />
+          <Property Name="ConnectedNodes" Type="int" />
+        </EntityType>
+        <EntityType Name="Service">
+          <Key>
+            <PropertyRef Name="ServiceID" />
+          </Key>
+          <Property Name="ServiceID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GatewayGuid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ServiceName" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="Status" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Disk_Gateway">
+          <End Role="Gateway" Type="Self.Gateway" Multiplicity="1" />
+          <End Role="Disk" Type="Self.Disk" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Gateway">
+              <PropertyRef Name="GatewayGuid" />
+            </Principal>
+            <Dependent Role="Disk">
+              <PropertyRef Name="GatewayGuid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LatestEvent_Gateway">
+          <End Role="Gateway" Type="Self.Gateway" Multiplicity="1" />
+          <End Role="LatestEvent" Type="Self.LatestEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Gateway">
+              <PropertyRef Name="GatewayGuid" />
+            </Principal>
+            <Dependent Role="LatestEvent">
+              <PropertyRef Name="GatewayGuid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PerformanceMetric_Gateway">
+          <End Role="Gateway" Type="Self.Gateway" Multiplicity="1" />
+          <End Role="PerformanceMetric" Type="Self.PerformanceMetric" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Gateway">
+              <PropertyRef Name="GatewayGuid" />
+            </Principal>
+            <Dependent Role="PerformanceMetric">
+              <PropertyRef Name="GatewayGuid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Service_Gateway">
+          <End Role="Gateway" Type="Self.Gateway" Multiplicity="1" />
+          <End Role="Service" Type="Self.Service" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Gateway">
+              <PropertyRef Name="GatewayGuid" />
+            </Principal>
+            <Dependent Role="Service">
+              <PropertyRef Name="GatewayGuid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="GatewayAnalyticsModelStoreContainer">
+          <EntitySet Name="Disk" EntityType="Self.Disk" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Gateway" EntityType="Self.Gateway" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LatestEvent" EntityType="Self.LatestEvent" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PerformanceMetric" EntityType="Self.PerformanceMetric" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Service" EntityType="Self.Service" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Disk_Gateway" Association="Self.FK_Disk_Gateway">
+            <End Role="Gateway" EntitySet="Gateway" />
+            <End Role="Disk" EntitySet="Disk" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LatestEvent_Gateway" Association="Self.FK_LatestEvent_Gateway">
+            <End Role="Gateway" EntitySet="Gateway" />
+            <End Role="LatestEvent" EntitySet="LatestEvent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PerformanceMetric_Gateway" Association="Self.FK_PerformanceMetric_Gateway">
+            <End Role="Gateway" EntitySet="Gateway" />
+            <End Role="PerformanceMetric" EntitySet="PerformanceMetric" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Service_Gateway" Association="Self.FK_Service_Gateway">
+            <End Role="Gateway" EntitySet="Gateway" />
+            <End Role="Service" EntitySet="Service" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="GatewayAnalyticsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="GatewayAnalyticsEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Disks" EntityType="GatewayAnalyticsModel.Disk" />
+          <EntitySet Name="Gateways" EntityType="GatewayAnalyticsModel.Gateway" />
+          <EntitySet Name="LatestEvents" EntityType="GatewayAnalyticsModel.LatestEvent" />
+          <EntitySet Name="PerformanceMetrics" EntityType="GatewayAnalyticsModel.PerformanceMetric" />
+          <EntitySet Name="Services" EntityType="GatewayAnalyticsModel.Service" />
+          <AssociationSet Name="FK_Disk_Gateway" Association="GatewayAnalyticsModel.FK_Disk_Gateway">
+            <End Role="Gateway" EntitySet="Gateways" />
+            <End Role="Disk" EntitySet="Disks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LatestEvent_Gateway" Association="GatewayAnalyticsModel.FK_LatestEvent_Gateway">
+            <End Role="Gateway" EntitySet="Gateways" />
+            <End Role="LatestEvent" EntitySet="LatestEvents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PerformanceMetric_Gateway" Association="GatewayAnalyticsModel.FK_PerformanceMetric_Gateway">
+            <End Role="Gateway" EntitySet="Gateways" />
+            <End Role="PerformanceMetric" EntitySet="PerformanceMetrics" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Service_Gateway" Association="GatewayAnalyticsModel.FK_Service_Gateway">
+            <End Role="Gateway" EntitySet="Gateways" />
+            <End Role="Service" EntitySet="Services" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Disk">
+          <Key>
+            <PropertyRef Name="DiskID" />
+          </Key>
+          <Property Name="DiskID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GatewayGuid" Type="Guid" Nullable="false" />
+          <Property Name="Label" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="TotalSpace" Type="Int64" Nullable="false" />
+          <Property Name="UsedSpace" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Gateway" Relationship="GatewayAnalyticsModel.FK_Disk_Gateway" FromRole="Disk" ToRole="Gateway" />
+        </EntityType>
+        <EntityType Name="Gateway">
+          <Key>
+            <PropertyRef Name="GatewayGuid" />
+          </Key>
+          <Property Name="GatewayGuid" Type="Guid" Nullable="false" />
+          <Property Name="TeamViewerID" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="MachineName" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="LastReportDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="RunningSince" Type="DateTime" Precision="3" />
+          <Property Name="OperatingSystem" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CpuInfo" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="MemorySize" Type="Int64" />
+          <Property Name="Latitude" Type="Double" />
+          <Property Name="Longitude" Type="Double" />
+          <Property Name="LocationDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Disks" Relationship="GatewayAnalyticsModel.FK_Disk_Gateway" FromRole="Gateway" ToRole="Disk" />
+          <NavigationProperty Name="LatestEvents" Relationship="GatewayAnalyticsModel.FK_LatestEvent_Gateway" FromRole="Gateway" ToRole="LatestEvent" />
+          <NavigationProperty Name="PerformanceMetric" Relationship="GatewayAnalyticsModel.FK_PerformanceMetric_Gateway" FromRole="Gateway" ToRole="PerformanceMetric" />
+          <NavigationProperty Name="Services" Relationship="GatewayAnalyticsModel.FK_Service_Gateway" FromRole="Gateway" ToRole="Service" />
+        </EntityType>
+        <EntityType Name="LatestEvent">
+          <Key>
+            <PropertyRef Name="EventID" />
+          </Key>
+          <Property Name="EventID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GatewayGuid" Type="Guid" Nullable="false" />
+          <Property Name="EventDateUtc" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EventName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="EventInfo" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Gateway" Relationship="GatewayAnalyticsModel.FK_LatestEvent_Gateway" FromRole="LatestEvent" ToRole="Gateway" />
+          <Property Name="AssetName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="PerformanceMetric">
+          <Key>
+            <PropertyRef Name="GatewayGuid" />
+          </Key>
+          <Property Name="GatewayGuid" Type="Guid" Nullable="false" />
+          <Property Name="TotalEventsProcessed" Type="Int32" />
+          <Property Name="EventsProcessedPerSec" Type="Int32" />
+          <Property Name="CurrentSignalQuality" Type="Int32" />
+          <Property Name="AverageSignalQuality" Type="Int32" />
+          <Property Name="Reliability" Type="Int32" />
+          <Property Name="Stability" Type="Int32" />
+          <Property Name="Latency" Type="Int32" />
+          <Property Name="ConnectedNodes" Type="Int32" />
+          <NavigationProperty Name="Gateway" Relationship="GatewayAnalyticsModel.FK_PerformanceMetric_Gateway" FromRole="PerformanceMetric" ToRole="Gateway" />
+        </EntityType>
+        <EntityType Name="Service">
+          <Key>
+            <PropertyRef Name="ServiceID" />
+          </Key>
+          <Property Name="ServiceID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GatewayGuid" Type="Guid" Nullable="false" />
+          <Property Name="ServiceName" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Gateway" Relationship="GatewayAnalyticsModel.FK_Service_Gateway" FromRole="Service" ToRole="Gateway" />
+        </EntityType>
+        <Association Name="FK_Disk_Gateway">
+          <End Type="GatewayAnalyticsModel.Gateway" Role="Gateway" Multiplicity="1" />
+          <End Type="GatewayAnalyticsModel.Disk" Role="Disk" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Gateway">
+              <PropertyRef Name="GatewayGuid" />
+            </Principal>
+            <Dependent Role="Disk">
+              <PropertyRef Name="GatewayGuid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LatestEvent_Gateway">
+          <End Type="GatewayAnalyticsModel.Gateway" Role="Gateway" Multiplicity="1" />
+          <End Type="GatewayAnalyticsModel.LatestEvent" Role="LatestEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Gateway">
+              <PropertyRef Name="GatewayGuid" />
+            </Principal>
+            <Dependent Role="LatestEvent">
+              <PropertyRef Name="GatewayGuid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PerformanceMetric_Gateway">
+          <End Type="GatewayAnalyticsModel.Gateway" Role="Gateway" Multiplicity="1" />
+          <End Type="GatewayAnalyticsModel.PerformanceMetric" Role="PerformanceMetric" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Gateway">
+              <PropertyRef Name="GatewayGuid" />
+            </Principal>
+            <Dependent Role="PerformanceMetric">
+              <PropertyRef Name="GatewayGuid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Service_Gateway">
+          <End Type="GatewayAnalyticsModel.Gateway" Role="Gateway" Multiplicity="1" />
+          <End Type="GatewayAnalyticsModel.Service" Role="Service" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Gateway">
+              <PropertyRef Name="GatewayGuid" />
+            </Principal>
+            <Dependent Role="Service">
+              <PropertyRef Name="GatewayGuid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="GatewayAnalyticsModelStoreContainer" CdmEntityContainer="GatewayAnalyticsEntities">
+          <EntitySetMapping Name="Disks">
+            <EntityTypeMapping TypeName="GatewayAnalyticsModel.Disk">
+              <MappingFragment StoreEntitySet="Disk">
+                <ScalarProperty Name="UsedSpace" ColumnName="UsedSpace" />
+                <ScalarProperty Name="TotalSpace" ColumnName="TotalSpace" />
+                <ScalarProperty Name="Label" ColumnName="Label" />
+                <ScalarProperty Name="GatewayGuid" ColumnName="GatewayGuid" />
+                <ScalarProperty Name="DiskID" ColumnName="DiskID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Gateways">
+            <EntityTypeMapping TypeName="GatewayAnalyticsModel.Gateway">
+              <MappingFragment StoreEntitySet="Gateway">
+                <ScalarProperty Name="LocationDate" ColumnName="LocationDate" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="MemorySize" ColumnName="MemorySize" />
+                <ScalarProperty Name="CpuInfo" ColumnName="CpuInfo" />
+                <ScalarProperty Name="OperatingSystem" ColumnName="OperatingSystem" />
+                <ScalarProperty Name="RunningSince" ColumnName="RunningSince" />
+                <ScalarProperty Name="LastReportDate" ColumnName="LastReportDate" />
+                <ScalarProperty Name="MachineName" ColumnName="MachineName" />
+                <ScalarProperty Name="TeamViewerID" ColumnName="TeamViewerID" />
+                <ScalarProperty Name="GatewayGuid" ColumnName="GatewayGuid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LatestEvents">
+            <EntityTypeMapping TypeName="GatewayAnalyticsModel.LatestEvent">
+              <MappingFragment StoreEntitySet="LatestEvent">
+                <ScalarProperty Name="AssetName" ColumnName="AssetName" />
+                <ScalarProperty Name="EventInfo" ColumnName="EventInfo" />
+                <ScalarProperty Name="EventName" ColumnName="EventName" />
+                <ScalarProperty Name="EventDateUtc" ColumnName="EventDateUtc" />
+                <ScalarProperty Name="GatewayGuid" ColumnName="GatewayGuid" />
+                <ScalarProperty Name="EventID" ColumnName="EventID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PerformanceMetrics">
+            <EntityTypeMapping TypeName="GatewayAnalyticsModel.PerformanceMetric">
+              <MappingFragment StoreEntitySet="PerformanceMetric">
+                <ScalarProperty Name="ConnectedNodes" ColumnName="ConnectedNodes" />
+                <ScalarProperty Name="Latency" ColumnName="Latency" />
+                <ScalarProperty Name="Stability" ColumnName="Stability" />
+                <ScalarProperty Name="Reliability" ColumnName="Reliability" />
+                <ScalarProperty Name="AverageSignalQuality" ColumnName="AverageSignalQuality" />
+                <ScalarProperty Name="CurrentSignalQuality" ColumnName="CurrentSignalQuality" />
+                <ScalarProperty Name="EventsProcessedPerSec" ColumnName="EventsProcessedPerSec" />
+                <ScalarProperty Name="TotalEventsProcessed" ColumnName="TotalEventsProcessed" />
+                <ScalarProperty Name="GatewayGuid" ColumnName="GatewayGuid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Services">
+            <EntityTypeMapping TypeName="GatewayAnalyticsModel.Service">
+              <MappingFragment StoreEntitySet="Service">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ServiceName" ColumnName="ServiceName" />
+                <ScalarProperty Name="GatewayGuid" ColumnName="GatewayGuid" />
+                <ScalarProperty Name="ServiceID" ColumnName="ServiceID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

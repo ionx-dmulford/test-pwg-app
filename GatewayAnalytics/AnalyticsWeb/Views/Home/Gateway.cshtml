@@ -1,0 +1,156 @@
+﻿@using Ionx.GatewayAnalytics
+@using Ionx.Entity.GatewayAnalytics.Data
+@model Ionx.Entity.GatewayAnalytics.Data.Gateway
+@{
+    ViewBag.Title = "Gateway";
+    var gateway = Model;
+}
+
+<div class="dashboard">
+    <h3>@gateway.MachineName / @gateway.TeamViewerID</h3>
+
+    <div class="column">
+        <div class="section-wrap">
+            <table>
+                <thead>
+                    <tr class="section-header">
+                        <th colspan="2" class="section-header-row">Summary</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Operating System</td>
+                        <td>@gateway.OperatingSystem</td>
+                    </tr>
+                    <tr>
+                        <td>CPU</td>
+                        <td>@gateway.CpuInfo</td>
+                    </tr>
+                    <tr>
+                        <td>Memory</td>
+                        <td>@(gateway.MemorySize.HasValue ? gateway.MemorySize.Value.ToSize() : "Unknown")</td>
+                    </tr>
+                    <tr>
+                        <td>Running Since</td>
+                        <td>
+                            @(gateway.RunningSince.HasValue ? gateway.RunningSince.ToRelativeTimeSpan() : MvcHtmlString.Create("Unknown"))
+                            @if (gateway.RunningSince.HasValue)
+                            {
+                                <span class="note">&nbsp;/&nbsp;@((DateTime.UtcNow - gateway.RunningSince.Value).ToTimeStringMini())</span>
+                            }
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="section-wrap">
+            <div class="section-header">Disks</div>
+
+            @foreach (var disk in gateway.Disks)
+            {
+                <div class="disk">
+                    <div>@disk.Label</div>
+                    <div>@disk.UsedSpace.ToSize() / @disk.TotalSpace.ToSize() <span class="note">(@((disk.TotalSpace - disk.UsedSpace).ToSize()) free)</span></div>
+                    <div class="bar">
+                        <div class="space-used">
+                            <div class="used good" style="width:@(Convert.ToDouble(disk.UsedSpace) / Convert.ToDouble(disk.TotalSpace) * 100)%"></div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="column">
+        <div class="section-wrap">
+            <table>
+                <thead>
+                    <tr class="section-header">
+                        <th colspan="2" class="section-header-row">Performance</th>
+                    </tr>
+                    <tr>
+                        <th>Activity</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Events processed</td>
+                        <td>
+                            @gateway.PerformanceMetric.TotalEventsProcessed
+                            <span class="note">(@gateway.PerformanceMetric.EventsProcessedPerSec per sec)</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Signal quality (RSSI)</td>
+                        <td>
+                            @gateway.PerformanceMetric.CurrentSignalQuality
+                            <span class="note">&nbsp;/&nbsp;@gateway.PerformanceMetric.AverageSignalQuality (24hr avg)</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Reliability</td>
+                        <td>@gateway.PerformanceMetric.Reliability</td>
+                    </tr>
+                    <tr>
+                        <td>Stability</td>
+                        <td>@gateway.PerformanceMetric.Stability</td>
+                    </tr>
+                    <tr>
+                        <td>Latency</td>
+                        <td>@gateway.PerformanceMetric.Latency</td>
+                    </tr>
+                    <tr>
+                        <td>Connected nodes</td>
+                        <td>@gateway.PerformanceMetric.ConnectedNodes</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="section-wrap">
+            <table>
+                <thead>
+                    <tr class="section-header">
+                        <th colspan="2" class="section-header-row">Services</th>
+                    </tr>
+                    <tr>
+                        <th>Service</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var service in gateway.Services)
+                    {
+                        <tr>
+                            <td>@service.ServiceName</td>
+                            <td>@service.Status</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="section-wrap">
+        <div class="section-header left-align">Latest Events</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Event Date (UTC)</th>
+                    <th>Asset</th>
+                    <th>Event Info</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var evt in gateway.LatestEvents)
+                {
+                    <tr>
+                        <td>@evt.EventDateUtc.ToString("u")</td>
+                        <td>@evt.AssetName</td>
+                        <td><span class="note">[@evt.EventName]</span> @evt.EventInfo</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

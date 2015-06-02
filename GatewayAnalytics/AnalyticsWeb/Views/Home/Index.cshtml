@@ -1,0 +1,35 @@
+﻿@using Ionx.GatewayAnalytics
+@using Ionx.Entity.GatewayAnalytics.Data
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<h3>Showing all known machines</h3>
+
+<table style="width:100%">
+    <thead>
+        <tr>
+            <th>TeamViewer ID</th>
+            <th>Machine Name</th>
+            <th>Running Since</th>
+            <th>Last Reported</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Gateway gateway in ViewBag.Gateways) {
+            <tr>
+                <td><a href="/@gateway.GatewayGuid">@gateway.TeamViewerID</a></td>
+                <td>@gateway.MachineName</td>
+                <td>
+                    @(gateway.RunningSince.HasValue ? gateway.RunningSince.ToRelativeTimeSpan() : MvcHtmlString.Create("Unknown"))
+                    @if (gateway.RunningSince.HasValue)
+                    {
+                        <span class="note">&nbsp;/&nbsp;@((DateTime.UtcNow - gateway.RunningSince.Value).ToTimeStringMini())</span>
+                    }
+                </td>
+                <td>@gateway.LastReportDate.ToRelativeTimeSpan() <span class="note">/&nbsp;@((DateTime.UtcNow - gateway.LastReportDate).ToTimeStringMini())</span></td>
+            </tr>
+        }
+    </tbody>
+</table>

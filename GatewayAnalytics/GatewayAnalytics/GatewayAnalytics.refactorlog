@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="849902dc-37e2-4f0a-a702-7dcec88248a7" ChangeDateTime="05/15/2015 14:52:44">
+    <Property Name="ElementName" Value="[dbo].[Gateway].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Gateway]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="GatewayGuid" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="b16e75c5-7159-49b8-a38f-0038a4561e71" ChangeDateTime="05/15/2015 14:56:33">
+    <Property Name="ElementName" Value="[dbo].[PerformanceMetric].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[PerformanceMetric]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="GatewayGuid" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="2591ab31-261f-45df-9745-53218cbf772b" ChangeDateTime="05/15/2015 15:00:04">
+    <Property Name="ElementName" Value="[dbo].[Service].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Service]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="GatewayGuid" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="efcf385d-a155-4921-856d-ee3ecc0e4cde" ChangeDateTime="05/15/2015 15:01:41">
+    <Property Name="ElementName" Value="[dbo].[Disk].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Disk]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="GatewayGuid" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ed9ca641-3224-4755-9c06-25d86362f38f" ChangeDateTime="05/15/2015 15:03:04">
+    <Property Name="ElementName" Value="[dbo].[LatestEvent].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[LatestEvent]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="GatewayGuid" />
+  </Operation>
+</Operations>

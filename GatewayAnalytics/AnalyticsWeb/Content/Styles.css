@@ -1,0 +1,90 @@
+﻿body {
+    font-family: "verb", Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    color: #232323;
+}
+
+table {
+    font: inherit;
+}
+
+table thead tr th {
+    font-weight: 700;
+}
+
+.dashboard {
+    width: 1024px;
+    padding: 5px 0 0 0;
+    margin: 0 auto;
+}
+
+.column {
+    width: 510px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.section-wrap {
+    border: solid 1px #e6e6e6;
+    border-radius: 5px;
+    padding: 4px;
+    margin-bottom: 5px;
+}
+
+.section-header {
+    text-align: center;
+    padding: 4px 0 2px 0;
+    margin-bottom: 2px;
+    font-weight: bold;
+    color: #444;
+    border-bottom: solid 1px #eee;
+}
+
+.section-header-row {
+    text-align: center;
+}
+
+.left-align {
+    text-align: left;
+}
+
+.dashboard table {
+    font: inherit;
+    width: 100%;
+}
+
+.dashboard > div table > tbody > tr:nth-of-type(odd) > td {
+    background: #f2f2f2;
+}
+
+.note {
+    color: #AAA;
+}
+
+.disk {
+    border: solid 1px #e6e6e6;
+    /*border-radius: 5px;*/
+    padding: 4px;
+    margin-bottom: 5px;
+}
+
+.bar {
+    clear: both;
+    text-align: center;
+}
+
+.space-used {
+    background-color: #eee;
+    height: 5px;
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.space-used .used {
+  height: 5px;
+  float: left;
+}
+
+.space-used .used.good {
+  background: #A0CFA0;
+}

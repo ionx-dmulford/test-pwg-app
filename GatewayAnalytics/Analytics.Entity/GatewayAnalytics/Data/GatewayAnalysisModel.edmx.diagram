@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="8944b4315ff44278bcdd28c7937f3847" Name="Diagram1">
+        <EntityTypeShape EntityType="GatewayAnalyticsModel.Disk" Width="1.5" PointX="3" PointY="1.375" />
+        <EntityTypeShape EntityType="GatewayAnalyticsModel.Gateway" Width="2.125" PointX="0.5" PointY="5.25" />
+        <EntityTypeShape EntityType="GatewayAnalyticsModel.LatestEvent" Width="1.5" PointX="3" PointY="7" />
+        <EntityTypeShape EntityType="GatewayAnalyticsModel.PerformanceMetric" Width="1.875" PointX="3" PointY="10" />
+        <EntityTypeShape EntityType="GatewayAnalyticsModel.Service" Width="1.5" PointX="3" PointY="4.375" />
+        <AssociationConnector Association="GatewayAnalyticsModel.FK_Disk_Gateway" />
+        <AssociationConnector Association="GatewayAnalyticsModel.FK_LatestEvent_Gateway" />
+        <AssociationConnector Association="GatewayAnalyticsModel.FK_PerformanceMetric_Gateway" />
+        <AssociationConnector Association="GatewayAnalyticsModel.FK_Service_Gateway" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
